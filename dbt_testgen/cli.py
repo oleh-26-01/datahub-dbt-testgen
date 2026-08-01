@@ -7,14 +7,16 @@ import asyncio
 import pathlib
 import sys
 
-from .catalog import connect
+from .catalog import connect, ensure_property_definition
 from .emit import to_evidence_report, to_schema_yaml
-from .inference import cross_model_findings, plan_all
+from .inference import census_finding, cross_model_findings, plan_all, refusal_summary
 
-COVERAGE_PROPERTY = "dbt_test_coverage_pct"
+COVERAGE_PROPERTY = "dbt_testgen.evidenced_coverage_pct"
+COVERAGE_PROPERTY_URN = f"urn:li:structuredProperty:{COVERAGE_PROPERTY}"
 
 
 async def _run(args) -> int:
+    gms = args.gms or "http://localhost:8080"
     async with connect(args.gms, allow_writes=args.write_back) as cat:
         datasets = await cat.dbt_datasets(limit=args.limit)
         if not datasets:
@@ -29,8 +31,20 @@ async def _run(args) -> int:
             print(f"  [{i}/{len(datasets)}] {ds.table}: {len(ds.fields)} columns",
                   file=sys.stderr)
 
-        plans = plan_all(datasets)
-        cross = cross_model_findings(plans)
+        print("Reading the deployment's documents…", file=sys.stderr)
+        docs = await cat.documents(datasets)
+        print(f"  {docs.documents_with_columns}/{docs.documents_read} documents describe "
+              f"columns; {len(docs.columns)} columns documented, "
+              f"{len(docs.value_tables)} enumerations declared", file=sys.stderr)
+
+        print("Measuring nullability across platforms…", file=sys.stderr)
+        census = await cat.nullability_census()
+
+        plans = plan_all(datasets, docs)
+        cross = cross_model_findings(plans, docs)
+        census_note = census_finding(census)
+        if census_note:
+            cross = [census_note] + list(cross)
 
         if args.command == "validate":
             from .validate import scaffold
@@ -40,8 +54,17 @@ async def _run(args) -> int:
                 root,
                 plans,
                 to_schema_yaml(plans, test_key=args.test_key,
-                               nest_arguments=not args.flat_test_args),
+                               nest_arguments=not args.flat_test_args,
+                               include_refused=args.with_refused),
             )
+            if args.with_refused:
+                retracted = sum(
+                    1 for p in plans for r in p.refusals if r.kind == "contradicted"
+                )
+                print(f"\nPROOF MODE: {retracted} retracted not_null tests added back.",
+                      file=sys.stderr)
+                print("`dbt build` should now fail exactly those, and nothing else.",
+                      file=sys.stderr)
             print(f"\nScaffolded a runnable dbt project at {root.resolve()}", file=sys.stderr)
             print(f"  models: {len(list((root / 'models').glob('*.sql')))}"
                   f"  seeds: {len(list((root / 'seeds').glob('*.csv')))}", file=sys.stderr)
@@ -53,29 +76,58 @@ async def _run(args) -> int:
         out.mkdir(parents=True, exist_ok=True)
         schema_path = out / "schema.yml"
         report_path = out / "EVIDENCE.md"
-        schema_path.write_text(to_schema_yaml(plans, test_key=args.test_key, nest_arguments=not args.flat_test_args), encoding="utf-8")
-        report_path.write_text(to_evidence_report(plans, cross), encoding="utf-8")
+        schema_path.write_text(
+            to_schema_yaml(plans, test_key=args.test_key,
+                           nest_arguments=not args.flat_test_args),
+            encoding="utf-8",
+        )
+        report_path.write_text(
+            to_evidence_report(plans, cross, census, docs.documents_read), encoding="utf-8"
+        )
 
         total = sum(len(p.tests) for p in plans)
-        warns = [f for p in plans for f in p.findings if f.severity == "warn"]
+        refusals = refusal_summary(plans)
         print(f"\nWrote {total} tests to {schema_path}", file=sys.stderr)
-        print(f"Wrote evidence to {report_path}", file=sys.stderr)
-        for f in warns:
-            print(f"  warn  {f.dataset}: {f.message}", file=sys.stderr)
+        print(f"Refused {sum(refusals.values())} tests — reasons in {report_path}",
+              file=sys.stderr)
+        for kind, count in sorted(refusals.items(), key=lambda kv: -kv[1]):
+            print(f"    {count:4}  {kind}", file=sys.stderr)
         for f in cross:
             if f.severity == "warn":
-                print(f"  warn  catalog-wide: {f.message[:160]}…", file=sys.stderr)
+                print(f"  warn  {f.dataset}: {f.message[:200]}…", file=sys.stderr)
+        for p in plans:
+            for f in p.findings:
+                if f.severity == "warn":
+                    print(f"  warn  {f.dataset}: {f.message[:200]}…", file=sys.stderr)
 
         if args.write_back:
-            print("\nWriting coverage back to DataHub…", file=sys.stderr)
-            ok = 0
+            print(f"\nPublishing coverage to DataHub as {COVERAGE_PROPERTY}…", file=sys.stderr)
+            try:
+                ensure_property_definition(
+                    gms, COVERAGE_PROPERTY, "Evidenced test coverage %",
+                    "Percentage of a model's columns carrying at least one dbt test that "
+                    "cites documented evidence. Written by dbt-testgen.",
+                )
+            except Exception as exc:            # noqa: BLE001 - surfaced, not swallowed
+                print(f"  could not create the property definition: {exc}", file=sys.stderr)
+                return 1
+
+            ok, failed = 0, []
             for p in plans:
-                if p.tests and await cat.write_coverage(
-                    p.dataset.urn, COVERAGE_PROPERTY, str(p.coverage)
-                ):
+                if not p.tests:
+                    continue
+                wrote, err = await cat.write_coverage(
+                    p.dataset.urn, COVERAGE_PROPERTY_URN, str(p.coverage)
+                )
+                if wrote:
                     ok += 1
-            print(f"  updated {ok}/{len(plans)} entities with {COVERAGE_PROPERTY}",
-                  file=sys.stderr)
+                else:
+                    failed.append((p.dataset.table, err))
+            print(f"  updated {ok} entities", file=sys.stderr)
+            for table, err in failed:
+                print(f"  FAILED {table}: {err}", file=sys.stderr)
+            if failed:
+                return 1
 
         return 0
 
@@ -98,7 +150,9 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--project", default="validation",
                     help="where `validate` scaffolds the throwaway dbt project")
     ap.add_argument("--write-back", action="store_true",
-                    help="publish test coverage back to DataHub as a structured property")
+                    help="publish evidenced test coverage back to DataHub")
+    ap.add_argument("--with-refused", action="store_true",
+                    help="add the retracted not_null tests back, to prove they fail")
     args = ap.parse_args(argv)
     try:
         return asyncio.run(_run(args))

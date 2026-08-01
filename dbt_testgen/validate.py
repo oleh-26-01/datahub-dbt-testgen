@@ -2,8 +2,13 @@
 
 A generated `schema.yml` is only worth trusting if it parses and executes. This
 builds a throwaway dbt+DuckDB project whose seed data is synthesised from the
-same DataHub schema the tests came from, so `dbt build` exercises every emitted
+same DataHub metadata the tests came from, so `dbt build` exercises every emitted
 test against data that satisfies the catalog's own contract.
+
+The seed data deliberately puts NULLs in every column the catalog's documentation
+describes as sometimes-empty. Those are exactly the columns whose `not_null`
+tests were refused, so the generated suite passing on this data is evidence that
+the refusals were right: add them back and the build fails.
 """
 
 from __future__ import annotations
@@ -34,10 +39,22 @@ PROFILES_YML = """testgen_validation:
       threads: 4
 """
 
+# Leave every third row empty in a documented-nullable column. Enough for a
+# refused not_null test to fail on, not so much that DuckDB loses the column
+# type when it infers the schema.
+_NULL_EVERY = 3
 
-def _sample_value(f: Field, row: int, pk_pool: dict[str, list[int]], plan: ModelPlan) -> str:
+
+def _sample_value(
+    f: Field, row: int, pk_pool: dict[str, list[int]], plan: ModelPlan,
+    nullable_cols: frozenset[str],
+) -> str:
     """Produce a value that honours whatever the catalog asserts about the column."""
     t = f.native_type.upper()
+    col = f.path.lower()
+
+    if col in nullable_cols and row % _NULL_EVERY == 2:
+        return ""
 
     # accepted_values tests constrain the domain — respect them.
     for test in plan.tests:
@@ -46,8 +63,8 @@ def _sample_value(f: Field, row: int, pk_pool: dict[str, list[int]], plan: Model
             return vals[row % len(vals)]
 
     if f.is_numeric:
-        if f.path.lower().endswith("_id") or f.path.lower() == "id":
-            pool = pk_pool.get(f.path.lower())
+        if col.endswith("_id") or col == "id":
+            pool = pk_pool.get(col)
             if pool:
                 return str(pool[row % len(pool)])
             return str(row + 1)
@@ -79,22 +96,42 @@ def scaffold(
     models_dir.mkdir(exist_ok=True)
     seeds_dir.mkdir(exist_ok=True)
 
-    # Primary-key pools, so foreign keys point at rows that genuinely exist and
-    # `relationships` tests are a real check rather than a tautology.
+    # Key pools, so foreign keys point at rows that genuinely exist and
+    # `relationships` tests are a real check rather than a tautology. Both ends
+    # of every relationship draw from the same pool.
     pk_pool: dict[str, list[int]] = {}
     for plan in plans:
         for t in plan.tests:
             if t.name == "unique":
                 pk_pool[t.column.lower()] = list(range(1, rows + 1))
+            elif t.name == "relationships" and t.config:
+                pk_pool.setdefault(str(t.config["field"]).lower(), list(range(1, rows + 1)))
 
-    written = 0
+    # A `relationships` test needs the model it points at to exist, even when
+    # that model carries no tests of its own. Without this, dbt quietly drops
+    # the test instead of running it — a generated test that never executes is
+    # worse than one that fails.
+    referenced = {
+        str(t.config["to"]).split("'")[1]
+        for plan in plans for t in plan.tests
+        if t.name == "relationships" and t.config
+    }
+
     for plan in plans:
         ds: Dataset = plan.dataset
-        if not plan.tests:
+        if not plan.tests and ds.table not in referenced:
             continue
-        cols = [f for f in ds.fields]
+        cols = list(ds.fields)
         if not cols:
             continue
+
+        # Columns a human documented as sometimes-empty — exactly those whose
+        # `not_null` was retracted, whether documented here or inherited across
+        # a lineage edge. Seeding real NULLs is what makes the retraction
+        # falsifiable rather than merely asserted.
+        nullable_cols = frozenset(
+            r.column.lower() for r in plan.refusals if r.kind == "contradicted"
+        )
 
         # Seeds are suffixed so they never collide with the model of the same
         # name — dbt refuses to build two resources with one database identity.
@@ -103,13 +140,12 @@ def scaffold(
             w = csv.writer(fh)
             w.writerow([f.path for f in cols])
             for r in range(rows):
-                w.writerow([_sample_value(f, r, pk_pool, plan) for f in cols])
+                w.writerow([_sample_value(f, r, pk_pool, plan, nullable_cols) for f in cols])
 
         (models_dir / f"{ds.table}.sql").write_text(
             f"-- generated for validation only\nselect * from {{{{ ref('{ds.table}_seed') }}}}\n",
             encoding="utf-8",
         )
-        written += 1
 
     (models_dir / "schema.yml").write_text(schema_yaml, encoding="utf-8")
     return root

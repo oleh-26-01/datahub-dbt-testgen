@@ -5,13 +5,16 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "dbt-testgen"
 version = "0.1.0"
-description = "Generate dbt tests grounded in DataHub metadata, with evidence for every test."
+description = "Generate dbt tests from DataHub documentation — and report the ones it refuses to write."
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "Apache-2.0" }
 dependencies = [
     "mcp>=1.0",
     "mcp-server-datahub>=0.5",
+    # Used only to declare the structured-property definition the write-back
+    # needs; the MCP server has no tool for that.
+    "acryl-datahub>=1.0",
     "PyYAML>=6.0",
 ]
 
