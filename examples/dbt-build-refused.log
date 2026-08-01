@@ -1,0 +1,306 @@
+16:29:59  Running with dbt=1.12.0
+16:29:59  Registered adapter: duckdb=1.10.1
+16:30:00  Unable to do partial parsing because saved manifest not found. Starting full parse.
+16:30:03  Found 13 models, 13 seeds, 88 data tests, 486 macros
+16:30:03  
+16:30:03  Concurrency: 4 threads (target='dev')
+16:30:03  
+16:30:04  1 of 114 START seed file main.addresses_seed ................................... [RUN]
+16:30:04  2 of 114 START seed file main.countries_seed ................................... [RUN]
+16:30:04  3 of 114 START seed file main.customers_seed ................................... [RUN]
+16:30:04  4 of 114 START seed file main.inventories_seed ................................. [RUN]
+16:30:04  4 of 114 OK loaded seed file main.inventories_seed ............................. [INSERT 12 in 0.16s]
+16:30:04  1 of 114 OK loaded seed file main.addresses_seed ............................... [INSERT 12 in 0.17s]
+16:30:04  3 of 114 OK loaded seed file main.customers_seed ............................... [INSERT 12 in 0.17s]
+16:30:04  2 of 114 OK loaded seed file main.countries_seed ............................... [INSERT 12 in 0.17s]
+16:30:04  5 of 114 START seed file main.order_details_seed ............................... [RUN]
+16:30:04  6 of 114 START seed file main.order_history_seed ............................... [RUN]
+16:30:04  7 of 114 START seed file main.order_items_seed ................................. [RUN]
+16:30:04  8 of 114 START seed file main.orders_seed ...................................... [RUN]
+16:30:04  6 of 114 OK loaded seed file main.order_history_seed ........................... [INSERT 12 in 0.10s]
+16:30:04  7 of 114 OK loaded seed file main.order_items_seed ............................. [INSERT 12 in 0.10s]
+16:30:04  5 of 114 OK loaded seed file main.order_details_seed ........................... [INSERT 12 in 0.11s]
+16:30:04  8 of 114 OK loaded seed file main.orders_seed .................................. [INSERT 12 in 0.11s]
+16:30:04  9 of 114 START seed file main.product_categories_seed .......................... [RUN]
+16:30:04  10 of 114 START seed file main.products_seed ................................... [RUN]
+16:30:04  11 of 114 START seed file main.promotions_seed ................................. [RUN]
+16:30:04  12 of 114 START seed file main.regions_seed .................................... [RUN]
+16:30:04  9 of 114 OK loaded seed file main.product_categories_seed ...................... [INSERT 12 in 0.08s]
+16:30:04  10 of 114 OK loaded seed file main.products_seed ............................... [INSERT 12 in 0.08s]
+16:30:04  13 of 114 START seed file main.warehouses_seed ................................. [RUN]
+16:30:04  12 of 114 OK loaded seed file main.regions_seed ................................ [INSERT 12 in 0.08s]
+16:30:04  11 of 114 OK loaded seed file main.promotions_seed ............................. [INSERT 12 in 0.08s]
+16:30:04  14 of 114 START sql view model main.inventories ................................ [RUN]
+16:30:04  15 of 114 START sql view model main.addresses .................................. [RUN]
+16:30:04  16 of 114 START sql view model main.customers .................................. [RUN]
+16:30:04  13 of 114 OK loaded seed file main.warehouses_seed ............................. [INSERT 12 in 0.13s]
+16:30:04  17 of 114 START sql view model main.countries .................................. [RUN]
+16:30:04  15 of 114 OK created sql view model main.addresses ............................. [OK in 0.16s]
+16:30:04  14 of 114 OK created sql view model main.inventories ........................... [OK in 0.16s]
+16:30:04  16 of 114 OK created sql view model main.customers ............................. [OK in 0.16s]
+16:30:04  18 of 114 START sql view model main.order_history .............................. [RUN]
+16:30:04  19 of 114 START sql view model main.order_items ................................ [RUN]
+16:30:04  20 of 114 START sql view model main.order_details .............................. [RUN]
+16:30:04  17 of 114 OK created sql view model main.countries ............................. [OK in 0.11s]
+16:30:04  21 of 114 START sql view model main.orders ..................................... [RUN]
+16:30:04  19 of 114 OK created sql view model main.order_items ........................... [OK in 0.11s]
+16:30:04  18 of 114 OK created sql view model main.order_history ......................... [OK in 0.12s]
+16:30:04  20 of 114 OK created sql view model main.order_details ......................... [OK in 0.12s]
+16:30:04  22 of 114 START sql view model main.product_categories ......................... [RUN]
+16:30:04  23 of 114 START sql view model main.products ................................... [RUN]
+16:30:04  24 of 114 START sql view model main.regions .................................... [RUN]
+16:30:04  21 of 114 OK created sql view model main.orders ................................ [OK in 0.12s]
+16:30:04  25 of 114 START sql view model main.promotions ................................. [RUN]
+16:30:04  22 of 114 OK created sql view model main.product_categories .................... [OK in 0.12s]
+16:30:04  26 of 114 START sql view model main.warehouses ................................. [RUN]
+16:30:05  24 of 114 OK created sql view model main.regions ............................... [OK in 0.12s]
+16:30:05  25 of 114 OK created sql view model main.promotions ............................ [OK in 0.07s]
+16:30:05  23 of 114 OK created sql view model main.products .............................. [OK in 0.12s]
+16:30:05  26 of 114 OK created sql view model main.warehouses ............................ [OK in 0.05s]
+16:30:05  27 of 114 START test not_null_addresses_address_id ............................. [RUN]
+16:30:05  28 of 114 START test unique_addresses_address_id ............................... [RUN]
+16:30:05  29 of 114 START test not_null_inventories_product_id ........................... [RUN]
+16:30:05  30 of 114 START test not_null_inventories_warehouse_id ......................... [RUN]
+16:30:06  28 of 114 PASS unique_addresses_address_id ..................................... [PASS in 0.11s]
+16:30:06  30 of 114 PASS not_null_inventories_warehouse_id ............................... [PASS in 0.11s]
+16:30:06  29 of 114 PASS not_null_inventories_product_id ................................. [PASS in 0.11s]
+16:30:06  27 of 114 PASS not_null_addresses_address_id ................................... [PASS in 0.11s]
+16:30:06  31 of 114 START test accepted_values_customers_customer_class__Premium__Standard  [RUN]
+16:30:06  32 of 114 START test accepted_values_customers_mailshot__Y__N .................. [RUN]
+16:30:06  33 of 114 START test accepted_values_customers_partner_mailshot__Y__N .......... [RUN]
+16:30:06  34 of 114 START test not_null_customers_account_mgr_id ......................... [RUN]
+16:30:06  31 of 114 PASS accepted_values_customers_customer_class__Premium__Standard ..... [PASS in 0.08s]
+16:30:06  32 of 114 PASS accepted_values_customers_mailshot__Y__N ........................ [PASS in 0.08s]
+16:30:06  33 of 114 PASS accepted_values_customers_partner_mailshot__Y__N ................ [PASS in 0.08s]
+16:30:06  34 of 114 FAIL 4 not_null_customers_account_mgr_id ............................. [FAIL 4 in 0.08s]
+16:30:06  35 of 114 START test not_null_customers_country_id ............................. [RUN]
+16:30:06  36 of 114 START test not_null_customers_customer_id ............................ [RUN]
+16:30:06  37 of 114 START test not_null_customers_region_id .............................. [RUN]
+16:30:06  38 of 114 START test relationships_addresses_customer_id__customer_id__ref_customers_  [RUN]
+16:30:06  35 of 114 PASS not_null_customers_country_id ................................... [PASS in 0.07s]
+16:30:06  39 of 114 START test unique_customers_customer_id .............................. [RUN]
+16:30:06  36 of 114 PASS not_null_customers_customer_id .................................. [PASS in 0.09s]
+16:30:06  37 of 114 PASS not_null_customers_region_id .................................... [PASS in 0.09s]
+16:30:06  38 of 114 PASS relationships_addresses_customer_id__customer_id__ref_customers_  [PASS in 0.10s]
+16:30:06  40 of 114 START test relationships_addresses_country_id__country_id__ref_countries_  [RUN]
+16:30:06  41 of 114 START test relationships_customers_country_id__country_id__ref_countries_  [RUN]
+16:30:06  42 of 114 START test accepted_values_order_items_condition__new__refurbished__used  [RUN]
+16:30:06  39 of 114 PASS unique_customers_customer_id .................................... [PASS in 0.09s]
+16:30:06  43 of 114 START test accepted_values_order_items_gift_wrap__Y__N ............... [RUN]
+16:30:06  41 of 114 PASS relationships_customers_country_id__country_id__ref_countries_ .. [PASS in 0.07s]
+16:30:06  40 of 114 PASS relationships_addresses_country_id__country_id__ref_countries_ .. [PASS in 0.08s]
+16:30:06  44 of 114 START test not_null_order_items_dispatch_date ........................ [RUN]
+16:30:06  42 of 114 PASS accepted_values_order_items_condition__new__refurbished__used ... [PASS in 0.09s]
+16:30:06  45 of 114 START test not_null_order_items_estimated_delivery ................... [RUN]
+16:30:06  46 of 114 START test not_null_order_items_line_item_id ......................... [RUN]
+16:30:06  43 of 114 PASS accepted_values_order_items_gift_wrap__Y__N ..................... [PASS in 0.08s]
+16:30:06  44 of 114 FAIL 4 not_null_order_items_dispatch_date ............................ [FAIL 4 in 0.07s]
+16:30:06  47 of 114 START test not_null_order_items_order_id ............................. [RUN]
+16:30:06  45 of 114 FAIL 4 not_null_order_items_estimated_delivery ....................... [FAIL 4 in 0.06s]
+16:30:06  48 of 114 START test not_null_order_items_product_id ........................... [RUN]
+16:30:06  46 of 114 PASS not_null_order_items_line_item_id ............................... [PASS in 0.06s]
+16:30:06  49 of 114 START test not_null_order_items_return_date .......................... [RUN]
+16:30:06  50 of 114 START test unique_order_items_line_item_id ........................... [RUN]
+16:30:06  47 of 114 PASS not_null_order_items_order_id ................................... [PASS in 0.08s]
+16:30:06  48 of 114 PASS not_null_order_items_product_id ................................. [PASS in 0.08s]
+16:30:06  51 of 114 START test relationships_order_history_customer_id__customer_id__ref_customers_  [RUN]
+16:30:06  49 of 114 FAIL 4 not_null_order_items_return_date .............................. [FAIL 4 in 0.07s]
+16:30:06  50 of 114 PASS unique_order_items_line_item_id ................................. [PASS in 0.07s]
+16:30:06  52 of 114 START test accepted_values_order_details_condition__new__refurbished__used  [RUN]
+16:30:06  53 of 114 START test accepted_values_order_details_customer_class__Premium__Standard  [RUN]
+16:30:06  54 of 114 START test accepted_values_order_details_delivery_type__ground__express__overnight__pickup  [RUN]
+16:30:06  51 of 114 PASS relationships_order_history_customer_id__customer_id__ref_customers_  [PASS in 0.10s]
+16:30:06  53 of 114 PASS accepted_values_order_details_customer_class__Premium__Standard . [PASS in 0.08s]
+16:30:06  55 of 114 START test accepted_values_order_details_gift_wrap__Y__N ............. [RUN]
+16:30:06  52 of 114 PASS accepted_values_order_details_condition__new__refurbished__used . [PASS in 0.09s]
+16:30:06  54 of 114 PASS accepted_values_order_details_delivery_type__ground__express__overnight__pickup  [PASS in 0.08s]
+16:30:06  56 of 114 START test accepted_values_order_details_order_mode__online__direct .. [RUN]
+16:30:06  57 of 114 START test accepted_values_order_details_order_status__Pending__Open__Shipped__Complete__Cancelled__On_Hold  [RUN]
+16:30:06  58 of 114 START test accepted_values_order_details_payment_method_code__CreditCard__PurchaseOrder__AccountBalance  [RUN]
+16:30:06  55 of 114 PASS accepted_values_order_details_gift_wrap__Y__N ................... [PASS in 0.08s]
+16:30:06  56 of 114 PASS accepted_values_order_details_order_mode__online__direct ........ [PASS in 0.08s]
+16:30:06  59 of 114 START test accepted_values_order_details_product_status__orderable__planned__under_development__obsolete  [RUN]
+16:30:06  57 of 114 PASS accepted_values_order_details_order_status__Pending__Open__Shipped__Complete__Cancelled__On_Hold  [PASS in 0.08s]
+16:30:06  58 of 114 PASS accepted_values_order_details_payment_method_code__CreditCard__PurchaseOrder__AccountBalance  [PASS in 0.07s]
+16:30:06  60 of 114 START test accepted_values_order_details_wait_till_complete_yn__Y__N . [RUN]
+16:30:06  61 of 114 START test not_null_order_details_category_id ........................ [RUN]
+16:30:06  62 of 114 START test not_null_order_details_customer_id ........................ [RUN]
+16:30:06  59 of 114 PASS accepted_values_order_details_product_status__orderable__planned__under_development__obsolete  [PASS in 0.08s]
+16:30:06  60 of 114 PASS accepted_values_order_details_wait_till_complete_yn__Y__N ....... [PASS in 0.07s]
+16:30:06  61 of 114 PASS not_null_order_details_category_id .............................. [PASS in 0.07s]
+16:30:06  63 of 114 START test not_null_order_details_dispatch_date ...................... [RUN]
+16:30:06  64 of 114 START test not_null_order_details_estimated_delivery ................. [RUN]
+16:30:06  65 of 114 START test not_null_order_details_order_id ........................... [RUN]
+16:30:06  62 of 114 PASS not_null_order_details_customer_id .............................. [PASS in 0.08s]
+16:30:06  66 of 114 START test not_null_order_details_product_id ......................... [RUN]
+16:30:06  64 of 114 FAIL 4 not_null_order_details_estimated_delivery ..................... [FAIL 4 in 0.08s]
+16:30:06  63 of 114 FAIL 4 not_null_order_details_dispatch_date .......................... [FAIL 4 in 0.09s]
+16:30:06  67 of 114 START test not_null_order_details_promotion_id ....................... [RUN]
+16:30:06  65 of 114 PASS not_null_order_details_order_id ................................. [PASS in 0.09s]
+16:30:06  68 of 114 START test not_null_order_details_return_date ........................ [RUN]
+16:30:06  66 of 114 PASS not_null_order_details_product_id ............................... [PASS in 0.07s]
+16:30:06  69 of 114 START test not_null_order_details_warehouse_id ....................... [RUN]
+16:30:06  70 of 114 START test relationships_order_details_customer_id__customer_id__ref_customers_  [RUN]
+16:30:07  67 of 114 FAIL 4 not_null_order_details_promotion_id ........................... [FAIL 4 in 0.09s]
+16:30:07  69 of 114 PASS not_null_order_details_warehouse_id ............................. [PASS in 0.08s]
+16:30:07  68 of 114 FAIL 4 not_null_order_details_return_date ............................ [FAIL 4 in 0.09s]
+16:30:07  71 of 114 START test accepted_values_orders_delivery_type__ground__express__overnight__pickup  [RUN]
+16:30:07  72 of 114 START test accepted_values_orders_order_mode__online__direct ......... [RUN]
+16:30:07  73 of 114 START test accepted_values_orders_order_status__Pending__Open__Shipped__Complete__Cancelled__On_Hold  [RUN]
+16:30:07  70 of 114 PASS relationships_order_details_customer_id__customer_id__ref_customers_  [PASS in 0.09s]
+16:30:07  74 of 114 START test accepted_values_orders_payment_method_code__CreditCard__PurchaseOrder__AccountBalance  [RUN]
+16:30:07  71 of 114 PASS accepted_values_orders_delivery_type__ground__express__overnight__pickup  [PASS in 0.09s]
+16:30:07  72 of 114 PASS accepted_values_orders_order_mode__online__direct ............... [PASS in 0.08s]
+16:30:07  73 of 114 PASS accepted_values_orders_order_status__Pending__Open__Shipped__Complete__Cancelled__On_Hold  [PASS in 0.08s]
+16:30:07  75 of 114 START test accepted_values_orders_wait_till_complete_yn__Y__N ........ [RUN]
+16:30:07  76 of 114 START test not_null_orders_billing_address_id ........................ [RUN]
+16:30:07  77 of 114 START test not_null_orders_customer_id ............................... [RUN]
+16:30:07  74 of 114 PASS accepted_values_orders_payment_method_code__CreditCard__PurchaseOrder__AccountBalance  [PASS in 0.08s]
+16:30:07  78 of 114 START test not_null_orders_delivery_address_id ....................... [RUN]
+16:30:07  76 of 114 PASS not_null_orders_billing_address_id .............................. [PASS in 0.08s]
+16:30:07  75 of 114 PASS accepted_values_orders_wait_till_complete_yn__Y__N .............. [PASS in 0.08s]
+16:30:07  77 of 114 PASS not_null_orders_customer_id ..................................... [PASS in 0.07s]
+16:30:07  79 of 114 START test not_null_orders_order_id .................................. [RUN]
+16:30:07  80 of 114 START test not_null_orders_promotion_id .............................. [RUN]
+16:30:07  81 of 114 START test not_null_orders_sales_rep_id .............................. [RUN]
+16:30:07  78 of 114 PASS not_null_orders_delivery_address_id ............................. [PASS in 0.07s]
+16:30:07  82 of 114 START test not_null_orders_warehouse_id .............................. [RUN]
+16:30:07  79 of 114 PASS not_null_orders_order_id ........................................ [PASS in 0.08s]
+16:30:07  83 of 114 START test relationships_order_details_order_id__order_id__ref_orders_  [RUN]
+16:30:07  80 of 114 FAIL 4 not_null_orders_promotion_id .................................. [FAIL 4 in 0.08s]
+16:30:07  81 of 114 FAIL 4 not_null_orders_sales_rep_id .................................. [FAIL 4 in 0.09s]
+16:30:07  84 of 114 START test relationships_order_history_order_id__order_id__ref_orders_  [RUN]
+16:30:07  82 of 114 PASS not_null_orders_warehouse_id .................................... [PASS in 0.08s]
+16:30:07  85 of 114 START test relationships_order_items_order_id__order_id__ref_orders_ . [RUN]
+16:30:07  86 of 114 START test relationships_orders_customer_id__customer_id__ref_customers_  [RUN]
+16:30:07  83 of 114 PASS relationships_order_details_order_id__order_id__ref_orders_ ..... [PASS in 0.10s]
+16:30:07  87 of 114 START test unique_orders_order_id .................................... [RUN]
+16:30:07  86 of 114 PASS relationships_orders_customer_id__customer_id__ref_customers_ ... [PASS in 0.07s]
+16:30:07  85 of 114 PASS relationships_order_items_order_id__order_id__ref_orders_ ....... [PASS in 0.10s]
+16:30:07  84 of 114 PASS relationships_order_history_order_id__order_id__ref_orders_ ..... [PASS in 0.11s]
+16:30:07  88 of 114 START test not_null_product_categories_category_id ................... [RUN]
+16:30:07  89 of 114 START test not_null_product_categories_parent_category_id ............ [RUN]
+16:30:07  90 of 114 START test relationships_order_details_category_id__category_id__ref_product_categories_  [RUN]
+16:30:07  87 of 114 PASS unique_orders_order_id .......................................... [PASS in 0.09s]
+16:30:07  91 of 114 START test relationships_product_categories_parent_category_id__parent_category_id__ref_product_categories_  [RUN]
+16:30:07  88 of 114 PASS not_null_product_categories_category_id ......................... [PASS in 0.08s]
+16:30:07  89 of 114 FAIL 4 not_null_product_categories_parent_category_id ................ [FAIL 4 in 0.09s]
+16:30:07  92 of 114 START test unique_product_categories_category_id ..................... [RUN]
+16:30:07  90 of 114 PASS relationships_order_details_category_id__category_id__ref_product_categories_  [PASS in 0.09s]
+16:30:07  93 of 114 START test relationships_addresses_region_id__region_id__ref_regions_  [RUN]
+16:30:07  94 of 114 START test relationships_customers_region_id__region_id__ref_regions_  [RUN]
+16:30:07  91 of 114 PASS relationships_product_categories_parent_category_id__parent_category_id__ref_product_categories_  [PASS in 0.10s]
+16:30:07  95 of 114 START test not_null_promotions_promotion_end_date .................... [RUN]
+16:30:07  92 of 114 PASS unique_product_categories_category_id ........................... [PASS in 0.09s]
+16:30:07  96 of 114 START test not_null_promotions_promotion_id .......................... [RUN]
+16:30:07  93 of 114 PASS relationships_addresses_region_id__region_id__ref_regions_ ...... [PASS in 0.10s]
+16:30:07  94 of 114 PASS relationships_customers_region_id__region_id__ref_regions_ ...... [PASS in 0.09s]
+16:30:07  97 of 114 START test relationships_order_details_promotion_id__promotion_id__ref_promotions_  [RUN]
+16:30:07  98 of 114 START test relationships_orders_promotion_id__promotion_id__ref_promotions_  [RUN]
+16:30:07  95 of 114 FAIL 4 not_null_promotions_promotion_end_date ........................ [FAIL 4 in 0.10s]
+16:30:07  99 of 114 START test unique_promotions_promotion_id ............................ [RUN]
+16:30:07  96 of 114 PASS not_null_promotions_promotion_id ................................ [PASS in 0.10s]
+16:30:07  100 of 114 START test accepted_values_products_product_status__orderable__planned__under_development__obsolete  [RUN]
+16:30:07  97 of 114 PASS relationships_order_details_promotion_id__promotion_id__ref_promotions_  [PASS in 0.11s]
+16:30:07  98 of 114 PASS relationships_orders_promotion_id__promotion_id__ref_promotions_  [PASS in 0.11s]
+16:30:07  101 of 114 START test not_null_products_category_id ............................ [RUN]
+16:30:07  102 of 114 START test not_null_products_product_id ............................. [RUN]
+16:30:07  99 of 114 PASS unique_promotions_promotion_id .................................. [PASS in 0.10s]
+16:30:07  100 of 114 PASS accepted_values_products_product_status__orderable__planned__under_development__obsolete  [PASS in 0.08s]
+16:30:07  103 of 114 START test not_null_products_supplier_id ............................ [RUN]
+16:30:07  104 of 114 START test not_null_products_warranty_period ........................ [RUN]
+16:30:07  101 of 114 PASS not_null_products_category_id .................................. [PASS in 0.08s]
+16:30:07  105 of 114 START test relationships_inventories_product_id__product_id__ref_products_  [RUN]
+16:30:07  102 of 114 PASS not_null_products_product_id ................................... [PASS in 0.09s]
+16:30:07  106 of 114 START test relationships_order_details_product_id__product_id__ref_products_  [RUN]
+16:30:07  103 of 114 PASS not_null_products_supplier_id .................................. [PASS in 0.10s]
+16:30:07  107 of 114 START test relationships_order_items_product_id__product_id__ref_products_  [RUN]
+16:30:07  104 of 114 FAIL 4 not_null_products_warranty_period ............................ [FAIL 4 in 0.09s]
+16:30:07  108 of 114 START test relationships_products_category_id__category_id__ref_product_categories_  [RUN]
+16:30:08  105 of 114 PASS relationships_inventories_product_id__product_id__ref_products_  [PASS in 0.10s]
+16:30:08  109 of 114 START test unique_products_product_id ............................... [RUN]
+16:30:08  106 of 114 PASS relationships_order_details_product_id__product_id__ref_products_  [PASS in 0.10s]
+16:30:08  110 of 114 START test not_null_warehouses_warehouse_id ......................... [RUN]
+16:30:08  107 of 114 PASS relationships_order_items_product_id__product_id__ref_products_  [PASS in 0.10s]
+16:30:08  111 of 114 START test relationships_inventories_warehouse_id__warehouse_id__ref_warehouses_  [RUN]
+16:30:08  108 of 114 PASS relationships_products_category_id__category_id__ref_product_categories_  [PASS in 0.08s]
+16:30:08  112 of 114 START test relationships_order_details_warehouse_id__warehouse_id__ref_warehouses_  [RUN]
+16:30:08  109 of 114 PASS unique_products_product_id ..................................... [PASS in 0.08s]
+16:30:08  113 of 114 START test relationships_orders_warehouse_id__warehouse_id__ref_warehouses_  [RUN]
+16:30:08  110 of 114 PASS not_null_warehouses_warehouse_id ............................... [PASS in 0.08s]
+16:30:08  114 of 114 START test unique_warehouses_warehouse_id ........................... [RUN]
+16:30:08  111 of 114 PASS relationships_inventories_warehouse_id__warehouse_id__ref_warehouses_  [PASS in 0.10s]
+16:30:08  112 of 114 PASS relationships_order_details_warehouse_id__warehouse_id__ref_warehouses_  [PASS in 0.08s]
+16:30:08  113 of 114 PASS relationships_orders_warehouse_id__warehouse_id__ref_warehouses_  [PASS in 0.06s]
+16:30:08  114 of 114 PASS unique_warehouses_warehouse_id ................................. [PASS in 0.05s]
+16:30:08  
+16:30:08  Finished running 13 seeds, 88 data tests, 13 view models in 0 hours 0 minutes and 4.29 seconds (4.29s).
+16:30:08  
+16:30:08  Completed with 13 errors, 0 partial successes, and 0 warnings:
+16:30:08  
+16:30:08  [ERROR]: in test not_null_customers_account_mgr_id (models\schema.yml)
+16:30:08    Got 4 results, configured to fail if != 0
+16:30:08  
+16:30:08    compiled code at target\compiled\testgen_validation\models\schema.yml\not_null_customers_account_mgr_id.sql
+16:30:08  
+16:30:08  [ERROR]: in test not_null_order_items_dispatch_date (models\schema.yml)
+16:30:08    Got 4 results, configured to fail if != 0
+16:30:08  
+16:30:08    compiled code at target\compiled\testgen_validation\models\schema.yml\not_null_order_items_dispatch_date.sql
+16:30:08  
+16:30:08  [ERROR]: in test not_null_order_items_estimated_delivery (models\schema.yml)
+16:30:08    Got 4 results, configured to fail if != 0
+16:30:08  
+16:30:08    compiled code at target\compiled\testgen_validation\models\schema.yml\not_null_order_items_estimated_delivery.sql
+16:30:08  
+16:30:08  [ERROR]: in test not_null_order_items_return_date (models\schema.yml)
+16:30:08    Got 4 results, configured to fail if != 0
+16:30:08  
+16:30:08    compiled code at target\compiled\testgen_validation\models\schema.yml\not_null_order_items_return_date.sql
+16:30:08  
+16:30:08  [ERROR]: in test not_null_order_details_estimated_delivery (models\schema.yml)
+16:30:08    Got 4 results, configured to fail if != 0
+16:30:08  
+16:30:08    compiled code at target\compiled\testgen_validation\models\schema.yml\not_null_order_details_estimated_delivery.sql
+16:30:08  
+16:30:08  [ERROR]: in test not_null_order_details_dispatch_date (models\schema.yml)
+16:30:08    Got 4 results, configured to fail if != 0
+16:30:08  
+16:30:08    compiled code at target\compiled\testgen_validation\models\schema.yml\not_null_order_details_dispatch_date.sql
+16:30:08  
+16:30:08  [ERROR]: in test not_null_order_details_promotion_id (models\schema.yml)
+16:30:08    Got 4 results, configured to fail if != 0
+16:30:08  
+16:30:08    compiled code at target\compiled\testgen_validation\models\schema.yml\not_null_order_details_promotion_id.sql
+16:30:08  
+16:30:08  [ERROR]: in test not_null_order_details_return_date (models\schema.yml)
+16:30:08    Got 4 results, configured to fail if != 0
+16:30:08  
+16:30:08    compiled code at target\compiled\testgen_validation\models\schema.yml\not_null_order_details_return_date.sql
+16:30:08  
+16:30:08  [ERROR]: in test not_null_orders_promotion_id (models\schema.yml)
+16:30:08    Got 4 results, configured to fail if != 0
+16:30:08  
+16:30:08    compiled code at target\compiled\testgen_validation\models\schema.yml\not_null_orders_promotion_id.sql
+16:30:08  
+16:30:08  [ERROR]: in test not_null_orders_sales_rep_id (models\schema.yml)
+16:30:08    Got 4 results, configured to fail if != 0
+16:30:08  
+16:30:08    compiled code at target\compiled\testgen_validation\models\schema.yml\not_null_orders_sales_rep_id.sql
+16:30:08  
+16:30:08  [ERROR]: in test not_null_product_categories_parent_category_id (models\schema.yml)
+16:30:08    Got 4 results, configured to fail if != 0
+16:30:08  
+16:30:08    compiled code at target\compiled\testgen_validation\models\schema.yml\not_null_product_categories_parent_category_id.sql
+16:30:08  
+16:30:08  [ERROR]: in test not_null_promotions_promotion_end_date (models\schema.yml)
+16:30:08    Got 4 results, configured to fail if != 0
+16:30:08  
+16:30:08    compiled code at target\compiled\testgen_validation\models\schema.yml\not_null_promotions_promotion_end_date.sql
+16:30:08  
+16:30:08  [ERROR]: in test not_null_products_warranty_period (models\schema.yml)
+16:30:08    Got 4 results, configured to fail if != 0
+16:30:08  
+16:30:08    compiled code at target\compiled\testgen_validation\models\schema.yml\not_null_products_warranty_period.sql
+16:30:08  
+16:30:08  Done. PASS=101 WARN=0 ERROR=13 SKIP=0 NO-OP=0 REUSED=0 TOTAL=114

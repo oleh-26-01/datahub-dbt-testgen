@@ -1,0 +1,26 @@
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # The inference and document-parsing rules have no DataHub dependency,
+        # so they run anywhere the package installs.
+        python-version: ["3.10", "3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      # Only what the tests touch. The DataHub SDK is imported lazily, inside
+      # the one function that needs it, so it is not required to run these.
+      - run: pip install pytest PyYAML "mcp>=1.0"
+      - run: pip install -e . --no-deps
+      - run: pytest -q

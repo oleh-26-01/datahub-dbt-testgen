@@ -1,23 +1,19 @@
-
 *.pyc
-.datahub/
-.env
+__pycache__/
+.pytest_cache/
 .venv/
+.env
+.datahub/
+
+# Generated output — examples/ holds the committed copy
+generated/
+validation/
+
+# Hackathon working notes, not part of the deliverable
 FEEDBACK-SUBMISSION.md
 FRICTION-LOG.md
 PLAN.md
 SUBMISSION.md
-__pycache__/
-dbt_err.txt
-desc.py
-dp_err.txt
-dp_load.txt
-explore.py
-generated/
-mcp_probe.py
 notes/
-quickstart.log
-schema.py
 skills-ref/
 upstream-pr/
-validation/
