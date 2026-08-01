@@ -8,16 +8,18 @@ import pathlib
 import sys
 
 from .catalog import connect, ensure_property_definition
-from .emit import to_evidence_report, to_schema_yaml
+from .emit import to_documentation_gaps, to_evidence_report, to_schema_yaml
 from .inference import census_finding, cross_model_findings, plan_all, refusal_summary
 
 COVERAGE_PROPERTY = "dbt_testgen.evidenced_coverage_pct"
 COVERAGE_PROPERTY_URN = f"urn:li:structuredProperty:{COVERAGE_PROPERTY}"
 
+GAPS_TITLE = "Undocumented columns blocking dbt test generation"
+
 
 async def _run(args) -> int:
     gms = args.gms or "http://localhost:8080"
-    async with connect(args.gms, allow_writes=args.write_back) as cat:
+    async with connect(args.gms, allow_writes=args.write_back or args.publish_gaps) as cat:
         datasets = await cat.dbt_datasets(limit=args.limit)
         if not datasets:
             print("No dbt datasets found in DataHub.", file=sys.stderr)
@@ -129,6 +131,18 @@ async def _run(args) -> int:
             if failed:
                 return 1
 
+        if args.publish_gaps:
+            print("\nPublishing the documentation gaps back to DataHub…", file=sys.stderr)
+            wrote, detail = await cat.save_report(
+                GAPS_TITLE,
+                to_documentation_gaps(plans),
+                related=[p.dataset.urn for p in plans if p.refusals],
+            )
+            if not wrote:
+                print(f"  FAILED: {detail}", file=sys.stderr)
+                return 1
+            print(f"  saved {detail}", file=sys.stderr)
+
         return 0
 
 
@@ -153,6 +167,9 @@ def main(argv: list[str] | None = None) -> int:
                     help="publish evidenced test coverage back to DataHub")
     ap.add_argument("--with-refused", action="store_true",
                     help="add the retracted not_null tests back, to prove they fail")
+    ap.add_argument("--publish-gaps", action="store_true",
+                    help="save the refusal report to DataHub as a Document — the list "
+                         "of columns worth documenting next")
     args = ap.parse_args(argv)
     try:
         return asyncio.run(_run(args))

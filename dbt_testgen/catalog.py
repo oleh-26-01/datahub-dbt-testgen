@@ -243,6 +243,54 @@ class Catalog:
         )
         return parse_corpus(grep, titles, default_tables, known_columns)
 
+    async def find_document(self, title: str) -> str | None:
+        """The URN of an existing document with this exact title, if any."""
+        listing = _json(
+            await self._s.call_tool("search_documents", {"query": title, "num_results": 25})
+        )
+        for r in listing.get("searchResults") or []:
+            ent = r.get("entity") or {}
+            if ((ent.get("info") or {}).get("title") or "").strip() == title.strip():
+                return ent.get("urn")
+        return None
+
+    async def save_report(
+        self, title: str, content: str, related: Iterable[str] = ()
+    ) -> tuple[bool, str]:
+        """Publish a report back into the catalog as a Document.
+
+        This package reads what humans documented in order to decide what to
+        test. The refusals are the inverse: a ranked list of the columns nobody
+        has written down yet. That belongs next to the documentation it is
+        asking for, not in a file on somebody's laptop.
+
+        Two things to know about `save_document`. Passing a `urn` only works for
+        a document that already exists — creating one lets DataHub mint the URN
+        — so re-running looks the title up first. And a failed save comes back
+        with `isError` unset and `"success": false` in the body, so the payload
+        has to be read rather than trusted.
+        """
+        args: dict[str, Any] = {
+            "document_type": "Analysis",
+            "title": title,
+            "content": content,
+            "topics": ["data quality", "dbt", "testing"],
+        }
+        related = list(related)
+        if related:
+            args["related_assets"] = related
+        existing = await self.find_document(title)
+        if existing:
+            args["urn"] = existing
+
+        res = await self._s.call_tool("save_document", args)
+        if getattr(res, "isError", False):
+            return False, _text(res).strip()[:300]
+        body = _json(res)
+        if not body.get("success"):
+            return False, str(body.get("message") or _text(res))[:300]
+        return True, body.get("urn") or ""
+
     async def write_coverage(self, urn: str, property_urn: str, value: str) -> tuple[bool, str]:
         """Push a computed value back onto the entity as a structured property.
 

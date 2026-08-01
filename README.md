@@ -148,6 +148,16 @@ SDK rather than MCP, because the MCP server can set a structured property's
 *value* but has no tool to declare the property itself; everything else — reads
 and the value writes — goes through MCP.
 
+```bash
+dbt-testgen generate --publish-gaps
+```
+
+Read the other way round, the refusal report is a work queue: every refusal is a
+test that would exist if somebody documented one column. `--publish-gaps` saves
+that list back into DataHub as a Document, linked to the models it concerns, so
+it sits next to the documentation it is asking for. Re-running updates the same
+document rather than adding another.
+
 ## Quickstart
 
 Requires a running DataHub (`datahub docker quickstart && datahub datapack load

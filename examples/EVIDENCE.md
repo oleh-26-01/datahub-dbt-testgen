@@ -2,7 +2,7 @@
 
 **75 tests emitted. 139 tests refused.**
 
-Across 11 models, mean column coverage 37.8%. Every emitted test cites a sentence written by a human in one of the 18 documents this DataHub deployment holds. Every refused test names the evidence that was missing.
+Across 11 models, mean column coverage 37.8%. Every emitted test cites a sentence written by a human in one of the 19 documents this DataHub deployment holds. Every refused test names the evidence that was missing.
 
 The second number is the one worth reading. A generated test that cannot be justified fails on correct data, and the reflex is to delete it — along with the tests that mattered.
 
