@@ -1,0 +1,9 @@
+14:56:08  43 of 221 FAIL 1 accepted_values_customers_customer_class__Platinum__Gold__Silver  [FAIL 1 in 0.02s]
+14:56:08  50 of 221 FAIL 1 not_null_customers_cust_email ................................. [FAIL 1 in 0.02s]
+14:56:08  66 of 221 FAIL 1 relationships_addresses_customer_id__customer_id__ref_customers_  [FAIL 1 in 0.02s]
+14:56:08  67 of 221 FAIL 1 unique_customers_customer_id .................................. [FAIL 1 in 0.02s]
+14:56:08  72 of 221 FAIL 1 relationships_addresses_country_id__country_id__ref_countries_  [FAIL 1 in 0.03s]
+14:56:09  80 of 221 FAIL 1 relationships_order_history_customer_id__customer_id__ref_customers_  [FAIL 1 in 0.06s]
+14:56:09  112 of 221 FAIL 1 relationships_orders_customer_id__customer_id__ref_customers_  [FAIL 1 in 0.07s]
+14:56:10  174 of 221 FAIL 1 relationships_order_details_customer_id__customer_id__ref_customers_  [FAIL 1 in 0.06s]
+14:56:11  Done. PASS=213 WARN=0 ERROR=8 SKIP=0 NO-OP=0 REUSED=0 TOTAL=221

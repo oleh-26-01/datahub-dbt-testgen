@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dbt-testgen"
+version = "0.1.0"
+description = "Generate dbt tests grounded in DataHub metadata, with evidence for every test."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "Apache-2.0" }
+dependencies = [
+    "mcp>=1.0",
+    "mcp-server-datahub>=0.5",
+    "PyYAML>=6.0",
+]
+
+[project.optional-dependencies]
+validate = ["dbt-core>=1.8", "dbt-duckdb>=1.8"]
+dev = ["pytest>=7.0"]
+
+[project.scripts]
+dbt-testgen = "dbt_testgen.cli:main"
+
+[tool.setuptools]
+packages = ["dbt_testgen"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
