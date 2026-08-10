@@ -4,6 +4,11 @@ Real output from a real run against DataHub's `showcase-ecommerce` sample —
 13 dbt models, 157 columns, 18 documents. Nothing here is illustrative or
 hand-written.
 
+One number to explain before you spot it: `EVIDENCE.md` here says it read **19**
+documents, not 18. The sample ships 18; the nineteenth is the one this tool
+publishes with `--publish-gaps`, and this copy was regenerated after that ran. A
+first run against a fresh `datahub datapack load showcase-ecommerce` reports 18.
+
 | File | What it is |
 | --- | --- |
 | [`schema.yml`](schema.yml) | The generated dbt test file — drop straight into `models/` |
